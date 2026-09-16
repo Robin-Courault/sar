@@ -1,3 +1,6 @@
+# bytes files
+*.pdf
+
 # Compiled class file
 *.class
 
