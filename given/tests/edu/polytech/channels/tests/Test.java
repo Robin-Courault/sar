@@ -39,7 +39,7 @@ public class Test {
     failStop();
   }
 
-  static String ClassName = "edu.polytech.channels.local.Boot";
+  static String ClassName = "api.edu.polytech.channels.local.Boot";
   static final String BROKER_OPTION = "-broker:";
   static final String NCLIENTS_OPTION = "-nclients:";
   static final String NCONNECTS_OPTION = "-nconnects:";
