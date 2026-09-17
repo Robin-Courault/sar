@@ -1,6 +1,9 @@
 # bytes files
 *.pdf
 
+# output files
+out/
+
 # Compiled class file
 *.class
 
