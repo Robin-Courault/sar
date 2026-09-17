@@ -47,7 +47,6 @@ public class CircularBuffer {
 
   /**
    * @param b: the byte to push in the buffer
-   * @return the next available byte
    * @throws an IllegalStateException if full.
    */
   public void push(byte b) {
