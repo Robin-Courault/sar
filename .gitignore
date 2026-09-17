@@ -1,5 +1,6 @@
 # bytes files
 *.pdf
+!specs/L1-ChannelSpecification.pdf
 
 # IDEs
 .idea/
