@@ -41,7 +41,7 @@ Une Task est une tâche, un programme démarrant par une fonction et utilisant �
 1. Une Task a connaissance d'un Broker qui lui sert de passerelle de communication.
 2. Une Task a une fonction qui décrit la réalisation de la tâche, ou à défaut amorce la réalisation de la tâche.
 3. Il doit être possible de récupérer le Broker de la tâche actuellement en cours d'exécution.
-4. Une Tâche peut avoir plusieurs connections avec plusieurs Channels.
+4. Une Tâche peut avoir une connection avec plusieurs Channels.
 
 ### II.3. Autres
 
