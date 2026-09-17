@@ -15,13 +15,10 @@ Un Broker est un objet qui permet de centraliser des canaux de communications.
    - La possibilité d'ouvrir un port correspondant à un entier afin de permettre la communication sur le Broker sur le port. Ouvrir un port revient à construire un Channel.
       - Cette action d'ouverture est bloquante tant qu'aucune connection n'est effectuée sur le port.
       - n Tâches peuvent lancer accept sur un même port, l'ordre n'est pas garantie.
-      - Si le port est déjà ouvert et que le Channel associé est encore disponible, aucune action supplémentaire n'est réalisée.
-      - Si le port est déjà ouvert et que le Channel associé n'est plus disponible (qu'il est fermé), alors un nouveau Channel est constitué et remplace le Channel anciennement associé.
    - La possibilité de récupérer le Channel associé au port sur un Broker donné en s'y connectant (action de connection). Le Channel retourné n'est pas forcément disponible (ouvert).
       - Dans le cas où le Broker cible n'existe pas, exception, retourne `null`.
       - Cette action de connection est bloquante jusqu'à ouverture du port demandé.
       - n Tâches peuvent lancer connect sur un même port et un même nom, l'ordre n'est pas garantie.
-      - Un Channel récupéré via cette connection est exclusif, parmi plusieurs Brokers tentant de se connecter au même port sur le même Broker, seul l'un des demandeurs récupèrera l'accès au Channel.
    > Ces deux fonctions sont un cas de rendez-vous.
 3. Un Broker peut être utilisé et connu par plusieurs Tâches.
 4. Thread safe induit par la possibilité d'attaque par plusieurs Tâches.
