@@ -1,6 +1,9 @@
 # bytes files
 *.pdf
 
+# IDEs
+.idea/
+
 # output files
 out/
 
