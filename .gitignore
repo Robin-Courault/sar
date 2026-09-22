@@ -4,8 +4,6 @@
 
 # IDEs
 .idea/
-.classpath
-.project
 
 # output files
 out/
