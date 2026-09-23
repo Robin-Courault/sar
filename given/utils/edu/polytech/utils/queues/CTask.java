@@ -4,10 +4,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.polytech.queues.QueueBroker;
-import edu.polytech.queues.Task;
-import edu.polytech.queues.local.CMessageQueue;
-import edu.polytech.queues.local.CQueueBroker;
+import api.edu.polytech.queues.QueueBroker;
+import api.edu.polytech.queues.Task;
+import api.edu.polytech.queues.local.CMessageQueue;
+import api.edu.polytech.queues.local.CQueueBroker;
 
 public class CTask extends Task {
   Executor e;

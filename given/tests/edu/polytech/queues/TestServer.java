@@ -16,9 +16,9 @@
  */
 package tests.edu.polytech.queues;
 
-import edu.polytech.queues.MessageQueue;
-import edu.polytech.queues.QueueBroker;
-import edu.polytech.queues.Task;
+import api.edu.polytech.queues.MessageQueue;
+import api.edu.polytech.queues.QueueBroker;
+import api.edu.polytech.queues.Task;
 
 public class TestServer {
   static boolean VERBOSE = true;

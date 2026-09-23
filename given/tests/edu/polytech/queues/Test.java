@@ -18,10 +18,10 @@ package tests.edu.polytech.queues;
 
 import java.lang.reflect.Constructor;
 
-import edu.polytech.queues.Bootstrap;
-import edu.polytech.queues.QueueBroker;
-import edu.polytech.queues.Task;
-import edu.polytech.utils.Executor;
+import api.edu.polytech.queues.Bootstrap;
+import api.edu.polytech.queues.QueueBroker;
+import api.edu.polytech.queues.Task;
+import utils.edu.polytech.utils.queues.Executor;
 
 /**
  * This test is a simple echo test based on a client-server architecture. The
@@ -71,7 +71,7 @@ public class Test {
     Executor.failStop(th);
   }
 
-  private static String QueueBrokerClassName = "edu.polytech.queues.local.Boot";
+  private static String QueueBrokerClassName = "api.edu.polytech.queues.local.Boot";
   private static final String QBROKER_OPTION = "-qbroker:";
   private static final String NCLIENTS_OPTION = "-nclients:";
   private static final String NCONNECTS_OPTION = "-nconnects:";

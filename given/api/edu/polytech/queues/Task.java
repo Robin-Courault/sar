@@ -1,6 +1,6 @@
 package api.edu.polytech.queues;
 
-import edu.polytech.utils.Executor;
+import utils.edu.polytech.utils.queues.Executor;
 
 public abstract class Task {
 

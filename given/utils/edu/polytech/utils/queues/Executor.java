@@ -16,9 +16,9 @@
  */
 package utils.edu.polytech.utils.queues;
 
-import edu.polytech.queues.Task;
-import edu.polytech.queues.local.CMessageQueue;
-import edu.polytech.queues.local.CQueueBroker;
+import api.edu.polytech.queues.Task;
+import api.edu.polytech.queues.local.CMessageQueue;
+import api.edu.polytech.queues.local.CQueueBroker;
 
 public class Executor extends Thread {
 
