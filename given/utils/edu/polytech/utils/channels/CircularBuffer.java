@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License     
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  */
-package utils.edu.polytech.utils;
+package utils.edu.polytech.utils.channels;
 
 /**
  * This circular buffer of bytes can be used to pass bytes between two threads:

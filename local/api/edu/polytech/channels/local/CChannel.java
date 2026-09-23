@@ -1,7 +1,7 @@
 package api.edu.polytech.channels.local;
 
 import api.edu.polytech.channels.Channel;
-import utils.edu.polytech.utils.CircularBuffer;
+import utils.edu.polytech.utils.channels.CircularBuffer;
 
 public class CChannel implements Channel {
 	private final CircularBuffer in;

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License     
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  */
-package tests.edu.polytech.channels.tests;
+package tests.edu.polytech.channels;
 
 import api.edu.polytech.channels.Broker;
 import api.edu.polytech.channels.Channel;
