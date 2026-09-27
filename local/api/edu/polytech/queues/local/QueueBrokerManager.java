@@ -18,7 +18,7 @@ public class QueueBrokerManager {
 
 	public static QueueBrokerManager getBrokerManager() {
 		if (singleton == null) {
-			throw new RuntimeException("BrokerManager not initialized");
+			singleton = new QueueBrokerManager();
 		}
 
 		return singleton;
