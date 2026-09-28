@@ -18,6 +18,7 @@ public class CMessageQueue implements MessageQueue {
 	private Listener listener;
 	private final List<SendRequest> toSend = new LinkedList<>();
 	private boolean pendingSend = false;
+	private Msg currentMsg = new Msg();
 
 	private CMessageQueue(CMessageQueue otherSide) {
 		this.in = otherSide.out;
@@ -158,10 +159,12 @@ public class CMessageQueue implements MessageQueue {
 	}
 
 	private class SendRequest {
+		private final byte[] lengthToSend;
 		private final byte[] bytes;
 		private final int offset;
 		private final int length;
 		private final SendListener listener;
+		private boolean lengthIsSended = false;
 		private int lastSended = 0;
 
 		public SendRequest(byte[] bytes, int offset, int length, SendListener l) {
@@ -169,6 +172,7 @@ public class CMessageQueue implements MessageQueue {
 			this.offset = offset;
 			this.length = length;
 			this.listener = l;
+			this.lengthToSend = IntToBytes.intToBytes(length);
 		}
 
 		public void sent() {
@@ -176,17 +180,28 @@ public class CMessageQueue implements MessageQueue {
 		}
 
 		public int send() {
-			int lastIndexSended = lastSended;
+			int bytesWrote = 0;
 
 			while (!out.full() && lastSended < length) {
-				out.push(bytes[offset + lastSended++]);
+				if (lengthIsSended) {
+					out.push(bytes[offset + lastSended]);
+					lastSended++;
+				} else {
+					out.push(lengthToSend[lastSended]);
+					lastSended++;
+					if (lastSended >= Integer.BYTES) {
+						lengthIsSended = true;
+						lastSended = 0;
+					}
+				}
+				bytesWrote ++;
 			}
 
-			if (lastIndexSended == lastSended) {
-				throw new IllegalStateException("Same byte to send after sent");
+			if (bytesWrote == 0) {
+				throw new IllegalStateException("No byte has been sent!");
 			}
 
-			return lastSended - lastIndexSended;
+			return bytesWrote;
 		}
 
 		public int restToSend() {
@@ -196,31 +211,31 @@ public class CMessageQueue implements MessageQueue {
 
 	private interface InternalListener {
 		public void messageSent(int size);
-		public void messageReaded();
+		public void bytesReaded();
 	}
 
 	protected class CInternalListener implements InternalListener {
 		@Override
 		public void messageSent(int size) {
-			byte[] bytes = new byte[size];
 			int index = 0;
-
 			while (!in.empty() && index < size) {
-				bytes[index] = in.pull();
+				if (currentMsg.receivedByte(in.pull())) {
+					byte[] tempMsg = currentMsg.getMsg();
+					broker.getTask().post(new Runnable() {
+						@Override
+						public void run() {
+							listener.received(tempMsg);
+						}
+					});
+					currentMsg = new Msg();
+				}
 				index++;
 			}
-
-			broker.getTask().post(new Runnable() {
-				@Override
-				public void run() {
-					listener.received(bytes);
-				}
-			});
 
 			otherSide.broker.getTask().post(new Runnable() {
 				@Override
 				public void run() {
-					otherSide.internalListener.messageReaded();
+					otherSide.internalListener.bytesReaded();
 				}
 			});
 
@@ -230,7 +245,7 @@ public class CMessageQueue implements MessageQueue {
 		}
 
 		@Override
-		public void messageReaded() {
+		public void bytesReaded() {
 			if (!pendingSend) {
 				pendingSend = true;
 				broker.getTask().post(new Runnable() {
@@ -239,6 +254,62 @@ public class CMessageQueue implements MessageQueue {
 						send();
 					}
 				});
+			}
+		}
+	}
+
+	private class Msg {
+		private byte[] lengthBytes;
+		private int length;
+		private byte[] receivedBuffer;
+		private int receivedCounter;
+		private boolean lengthMode; // true - length | false - msg
+
+		public Msg() {
+			lengthBytes = null;
+			receivedBuffer = null;
+			lengthMode = true;
+			resetLength();
+		}
+
+		private void resetLength() {
+			lengthBytes = new byte[Integer.BYTES];
+		}
+
+		/**
+		 * @param b byte received
+		 * @return true when a call to getMsg() returns the complete msg, false otherwise
+		 */
+		public boolean receivedByte(byte b) {
+			if (lengthMode) {
+				lengthBytes[receivedCounter] = b;
+				receivedCounter++;
+
+				if (receivedCounter == Integer.BYTES) {
+					length = IntToBytes.bytesToInt(lengthBytes);
+					receivedBuffer = new byte[length];
+					receivedCounter = 0;
+					lengthMode = false;
+				}
+			} else {
+				if (receivedCounter == length) {
+					return true;
+				}
+
+				receivedBuffer[receivedCounter] = b;
+				receivedCounter++;
+
+				return receivedCounter == length;
+			}
+
+			return false;
+		}
+
+		public byte[] getMsg() {
+			if (lengthMode) {
+				return null;
+			} else {
+				return receivedBuffer;
 			}
 		}
 	}
