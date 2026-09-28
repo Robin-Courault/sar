@@ -47,6 +47,10 @@ public class CMessageQueue implements MessageQueue {
 
 	@Override
 	public boolean send(byte[] bytes, int offset, int length, SendListener l) {
+		if (offset < 0 && offset + length > bytes.length) {
+			throw new IllegalArgumentException("Offset or length out of range");
+		}
+
 		if (state != ClosingState.OPEN || otherSide.state != ClosingState.OPEN) {
 			broker().getTask().post(new Runnable() {
 				@Override
