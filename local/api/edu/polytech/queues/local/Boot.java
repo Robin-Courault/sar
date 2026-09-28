@@ -7,8 +7,11 @@ import utils.edu.polytech.utils.queues.Executor;
 public class Boot implements Bootstrap {
 	@Override
 	public Task newTask(Runnable r, String name) {
-		Task newTask = Executor.self().newTask(name);
-		newTask.post(r);
+		Executor e = Executor.self();
+		Task newTask = e.newTask(name);
+		synchronized (e) {
+			newTask.post(r);
+		}
 		return newTask;
 	}
 }
